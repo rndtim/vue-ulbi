@@ -11,7 +11,7 @@
         placeholder="Description"/>
     <my-button
         @click="createPost"
-        style="align-self: flex-start; margin-top: 10px;"
+        style="align-self: flex-start; margin-top: 15px;"
     >
       Create
     </my-button>
@@ -32,10 +32,14 @@ export default {
   methods: {
     createPost() {
       this.post.id = Date.now();
-      this.$emit('create', this.post);
-      this.post = {
-        title: '',
-        body: ''
+      if (this.post.title === '' || this.post.body === '')
+        alert('U have to fill the fields');
+      else {
+        this.$emit('create', this.post);
+        this.post = {
+          title: '',
+          body: ''
+        }
       }
     }
   }
@@ -43,6 +47,10 @@ export default {
 </script>
 
 <style scoped>
+
+h4 {
+  margin: 10px;
+}
 
 form {
   display: flex;
