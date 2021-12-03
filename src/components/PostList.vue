@@ -2,7 +2,10 @@
   <div>
     <h3>List of posts</h3>
     <post-item v-for="post in posts"
-               :post="post"/>
+               :post="post"
+               :key="post.id"
+               @remove="$emit('remove',post)"
+    />
   </div>
 </template>
 

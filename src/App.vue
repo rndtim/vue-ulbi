@@ -5,6 +5,7 @@
     />
     <post-list
         :posts="posts"
+        @remove="removePost"
         />
   </div>
 </template>
@@ -25,13 +26,16 @@ export default {
         {id: 1, title: 'JS', body: "Description"},
         {id: 2, title: 'JS 2', body: "Description 2"},
         {id: 3, title: 'JS 3', body: "Description 3"},
-        {id: 3, title: 'JS 4', body: "Description 4"},
+        {id: 4, title: 'JS 4', body: "Description 4"},
       ]
     }
   },
   methods: {
     createPost(post){
       this.posts.push(post)
+    },
+    removePost(post) {
+      this.posts = this.posts.filter(p => p.id !== post.id)
     }
   }
 }
