@@ -6,9 +6,7 @@
     >
       Create post
     </my-button>
-    <my-button @click="fetchPosts">
-      Get Posts from Api
-    </my-button>
+
     <my-dialog v-model:show="dialogVisible">
       <post-form
           @create="createPost"
@@ -18,7 +16,9 @@
     <post-list
         :posts="posts"
         @remove="removePost"
+        v-if="!isPostLoading"
     />
+    <div v-else>Loading posts...</div>
   </div>
 </template>
 
@@ -41,6 +41,7 @@ export default {
     return {
       posts: [],
       dialogVisible: false,
+      isPostLoading: true,
     }
   },
   methods: {
@@ -54,16 +55,22 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
-
     async fetchPosts() {
         try {
-          const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
-          this.posts = response.data;
+            const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+            this.posts = response.data;
+            // this.isPostLoading = false;
         }
         catch (e){
           alert('Error: ' + e)
         }
+        finally {
+          this.isPostLoading = false;
+        }
     }
+  },
+  mounted() {
+    this.fetchPosts(); // load post as app opens
   }
 }
 </script>
