@@ -5,7 +5,7 @@
       <div><strong>Description</strong> {{ post.body }}</div>
     </div>
     <div class="post__btns">
-      <button>Delete</button>
+      <my-button style="background-color: #f53c3c">Delete</my-button>
     </div>
   </div>
 </template>

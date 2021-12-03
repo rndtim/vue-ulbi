@@ -1,25 +1,25 @@
 <template>
   <form @submit.prevent>
     <h4>Create post</h4>
-    <input
+    <my-input
         v-model="post.title"
-        class="input"
         type="text"
-        placeholder="Title">
-    <input
+        placeholder="Title"/>
+    <my-input
         v-model="post.body"
-        class="input"
         type="text"
-        placeholder="Description">
-    <button
+        placeholder="Description"/>
+    <my-button
         @click="createPost"
-        class="btn">
+        style="align-self: flex-start; margin-top: 10px;"
+    >
       Create
-    </button>
+    </my-button>
   </form>
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -44,24 +44,10 @@ export default {
 
 <style scoped>
 
-.input {
-  padding: 10px 15px;
-  border: 1px solid deepskyblue;
-  margin-top: 10px;
-}
-
 form {
   display: flex;
   flex-direction: column;
 }
 
-.btn {
-  margin-top: 10px;
-  align-self: flex-start;
-  background-color: lightgreen;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  box-shadow: 5px 2px 2px green;
-}
+
 </style>
