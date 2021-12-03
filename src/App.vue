@@ -6,6 +6,9 @@
     >
       Create post
     </my-button>
+    <my-button @click="fetchPosts">
+      Get Posts from Api
+    </my-button>
     <my-dialog v-model:show="dialogVisible">
       <post-form
           @create="createPost"
@@ -24,6 +27,7 @@ import PostForm from "./components/PostForm";
 import PostList from "./components/PostList";
 import MyDialog from "./components/UI/MyDialog";
 import MyButton from "./components/UI/MyButton";
+import axios from "axios";
 
 export default {
   components: {
@@ -35,12 +39,7 @@ export default {
 
   data() {
     return {
-      posts: [
-        {id: 1, title: 'JS', body: "Description"},
-        {id: 2, title: 'JS 2', body: "Description 2"},
-        {id: 3, title: 'JS 3', body: "Description 3"},
-        {id: 4, title: 'JS 4', body: "Description 4"},
-      ],
+      posts: [],
       dialogVisible: false,
     }
   },
@@ -54,6 +53,16 @@ export default {
     },
     showDialog() {
       this.dialogVisible = true;
+    },
+
+    async fetchPosts() {
+        try {
+          const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+          this.posts = response.data;
+        }
+        catch (e){
+          alert('Error: ' + e)
+        }
     }
   }
 }

@@ -17,5 +17,6 @@ export default {
   border: none;
   border-radius: 5px;
   box-shadow: 5px 2px 2px gray;
+  margin-right: 10px;
 }
 </style>
