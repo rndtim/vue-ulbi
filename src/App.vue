@@ -1,11 +1,16 @@
 <template>
   <div class="main">
     <h1>Posts</h1>
-    <my-button
-    @click="showDialog"
-    >
-      Create post
-    </my-button>
+    <div class="app__btns">
+      <my-button
+          @click="showDialog"
+      >
+        Create post
+      </my-button>
+      <my-select v-model="selectedSort" :options="sortOptions">
+
+      </my-select>
+    </div>
 
     <my-dialog v-model:show="dialogVisible">
       <post-form
@@ -28,9 +33,11 @@ import PostList from "./components/PostList";
 import MyDialog from "./components/UI/MyDialog";
 import MyButton from "./components/UI/MyButton";
 import axios from "axios";
+import MySelect from "./components/UI/MySelect";
 
 export default {
   components: {
+    MySelect,
     MyButton,
     MyDialog,
     PostList,
@@ -42,6 +49,12 @@ export default {
       posts: [],
       dialogVisible: false,
       isPostLoading: true,
+      selectedSort: '',
+      sortOptions: [
+        {value: 'title', name: 'By name'},
+        {value: 'body', name: 'By description'},
+        {value: 'id', name: 'By ID'}
+      ]
     }
   },
   methods: {
@@ -56,17 +69,15 @@ export default {
       this.dialogVisible = true;
     },
     async fetchPosts() {
-        try {
-            const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
-            this.posts = response.data;
-            // this.isPostLoading = false;
-        }
-        catch (e){
-          alert('Error: ' + e)
-        }
-        finally {
-          this.isPostLoading = false;
-        }
+      try {
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+        this.posts = response.data;
+        // this.isPostLoading = false;
+      } catch (e) {
+        alert('Error: ' + e)
+      } finally {
+        this.isPostLoading = false;
+      }
     }
   },
   mounted() {
@@ -87,4 +98,8 @@ body {
   width: 75%;
 }
 
+.app__btns {
+  display: flex;
+  justify-content: space-between;
+}
 </style>
