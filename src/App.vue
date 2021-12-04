@@ -19,7 +19,7 @@
     </my-dialog>
 
     <post-list
-        :posts="posts"
+        :posts="sortedPosts"
         @remove="removePost"
         v-if="!isPostLoading"
     />
@@ -82,7 +82,20 @@ export default {
   },
   mounted() {
     this.fetchPosts(); // load post as app opens
-  }
+  },
+  computed: {
+    sortedPosts() {
+      //make a new array
+      return [...this.posts].sort((a,b) => a[this.selectedSort]?.localeCompare(b[this.selectedSort]))
+    }
+  },
+  // watch: {
+  //   selectedSort(newValue) {
+  //     this.posts.sort((a,b) => {
+  //       return a[this.selectedSort].localeCompare(b[this.selectedSort]);
+  //     })
+  //   }
+  // }
 }
 </script>
 
