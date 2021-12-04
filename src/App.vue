@@ -28,6 +28,18 @@
         v-if="!isPostLoading"
     />
     <div v-else>Loading posts...</div>
+    <div class="page__wrapper">
+      <div v-for="pageNumber in totalPages"
+           :key="pageNumber"
+           class="page"
+           :class="{
+             'current-page': page === pageNumber
+           }"
+           @click="changePage(pageNumber)"
+      >
+        {{ pageNumber }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -62,6 +74,9 @@ export default {
         {value: 'id', name: 'By ID'}
       ],
       searchQuery: '',
+      page: 1,
+      limit: 10,
+      totalPages: 0,
     }
   },
   methods: {
@@ -75,9 +90,20 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
+    changePage(pageNumber) {
+      this.page = pageNumber;
+      this.fetchPosts();
+    },
     async fetchPosts() {
       try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+            _page: this.page,
+            _limit: this.limit
+          }
+        });
+        //post per page
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
         this.posts = response.data;
         // this.isPostLoading = false;
       } catch (e) {
@@ -93,19 +119,22 @@ export default {
   computed: {
     sortedPosts() {
       //make a new array
-      return [...this.posts].sort((a,b) => a[this.selectedSort]?.localeCompare(b[this.selectedSort]))
+      return [...this.posts].sort((a, b) => a[this.selectedSort]?.localeCompare(b[this.selectedSort]))
     },
     sortedPostsSearch() {
       return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery))
     }
   },
-  // watch: {
-  //   selectedSort(newValue) {
-  //     this.posts.sort((a,b) => {
-  //       return a[this.selectedSort].localeCompare(b[this.selectedSort]);
-  //     })
-  //   }
-  // }
+  watch: {
+    // selectedSort(newValue) {
+    //   this.posts.sort((a,b) => {
+    //     return a[this.selectedSort].localeCompare(b[this.selectedSort]);
+    //   })
+    // }
+    page() {
+      this.fetchPosts()
+    }
+  }
 }
 </script>
 
@@ -124,5 +153,22 @@ body {
 .app__btns {
   display: flex;
   justify-content: space-between;
+}
+
+.page__wrapper {
+  display: flex;
+  margin-top: 15px;
+}
+
+.page {
+  border: 1px solid black;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
+
+.current-page {
+  border: 2px solid lightcoral;
 }
 </style>
