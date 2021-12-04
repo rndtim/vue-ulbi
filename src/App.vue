@@ -1,6 +1,10 @@
 <template>
   <div class="main">
     <h1>Posts</h1>
+    <my-input
+        v-model="searchQuery"
+        placeholder="Search"
+    />
     <div class="app__btns">
       <my-button
           @click="showDialog"
@@ -19,7 +23,7 @@
     </my-dialog>
 
     <post-list
-        :posts="sortedPosts"
+        :posts="sortedPostsSearch"
         @remove="removePost"
         v-if="!isPostLoading"
     />
@@ -34,9 +38,11 @@ import MyDialog from "./components/UI/MyDialog";
 import MyButton from "./components/UI/MyButton";
 import axios from "axios";
 import MySelect from "./components/UI/MySelect";
+import MyInput from "./components/UI/MyInput";
 
 export default {
   components: {
+    MyInput,
     MySelect,
     MyButton,
     MyDialog,
@@ -54,7 +60,8 @@ export default {
         {value: 'title', name: 'By name'},
         {value: 'body', name: 'By description'},
         {value: 'id', name: 'By ID'}
-      ]
+      ],
+      searchQuery: '',
     }
   },
   methods: {
@@ -87,6 +94,9 @@ export default {
     sortedPosts() {
       //make a new array
       return [...this.posts].sort((a,b) => a[this.selectedSort]?.localeCompare(b[this.selectedSort]))
+    },
+    sortedPostsSearch() {
+      return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery))
     }
   },
   // watch: {
